@@ -26,3 +26,9 @@
     font-size: 1.6rem;
     text-align: center;
 }
+.button {
+    background-color: rgb(42, 161, 106) !important;
+    &:hover {
+        background-color: rgb(30, 112, 73) !important;
+    }
+}
