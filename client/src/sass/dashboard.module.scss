@@ -1,0 +1,112 @@
+.half {
+    height: 100vh;
+    width: 50%;
+    border-left: 1px solid gray;
+}
+
+.rightHalf {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    text-transform: uppercase;
+    width: 50%;
+    background-color: rgb(232, 5, 47);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 5px;
+    transition: 0.2s all ease;
+
+    &:hover {
+        background-color: rgb(136, 2, 2);
+    }
+}
+
+.leftHalf {
+    display: flex;
+    flex-direction: column;
+}
+
+.upper {
+    border-bottom: 1px solid gray;
+    height: 50%;
+    padding: 10px 10px;
+    h2 {
+        color: #fff;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-top: 0.7rem;
+    }
+}
+
+.lower {
+    height: 50%;
+
+    h2 {
+        color: #fff;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-top: 0.7rem;
+    }
+}
+
+.input {
+    color: #fff !important;
+    width: 80%;
+    background: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #fff;
+    padding: 5px 5px;
+    font-size: 1.3rem;
+    margin: 10px auto;
+    display: block;
+}
+
+::-webkit-input-placeholder {
+    color: #fff !important;
+}
+
+.buttonAdd {
+    height: 50px;
+    width: 50px;
+    border-radius: 5px;
+    background-color: rgb(79, 104, 243);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    margin: 0 auto;
+    font-size: 2rem;
+    transition: 0.2s all ease;
+
+    &:hover {
+        background-color: rgb(63, 83, 195);
+    }
+}
+
+.inputTruth {
+    display: block;
+    width: 80%;
+    padding: 5px 5px;
+    font-size: 1.3rem;
+    margin: 10px auto;
+}
+.previousTruths {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+    max-height: 60%;
+    padding: 10px 10px;
+}

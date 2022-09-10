@@ -10,7 +10,11 @@ app.use(express.json());
 
 //Routes
 const Register = require('./routes/auth/register');
+const Login = require('./routes/auth/login');
+const GetTruthsAndLies = require('./routes/userInfo/truthsAndLies');
 app.use('/', Register);
+app.use('/', Login);
+app.use('/', GetTruthsAndLies);
 
 
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
