@@ -11,8 +11,7 @@ export default function Dashboard() {
     const [truth, setTruth] = useState("");
     const [lie, setLie] = useState("");
 
-    const { isLoading, data } = useQuery('fetch-truths-and-lies', getTruthsAndLies)
-    console.log(data);
+    const { isLoading, data, refetch } = useQuery('fetch-truths-and-lies', getTruthsAndLies)
 
     const AddTruth = () => {
         if (truth !== "" || truth !== null) {
@@ -20,6 +19,7 @@ export default function Dashboard() {
             .then(res => {
                 console.log(res.data)
                 setTruth("");
+                refetch();
             })
             .catch(err => {
                 console.log(err)
@@ -32,6 +32,7 @@ export default function Dashboard() {
             .then(res => {
                 console.log(res.data)
                 setLie("");
+                refetch();
             })
             .catch(err => {
                 console.log(err)
@@ -54,10 +55,12 @@ export default function Dashboard() {
                 </div>
                 <div className={styles.lower}>
                     <h2>Add Lies Here</h2>
+                    <div className={styles.previousTruths}>
                     {!isLoading && data.data.lies.map((lie, key) => {
                         return <input key={key} className={styles.inputTruth} type="text" value={lie} disabled />
                     })}
-                    <input onChange={e => setLie(e.target.value)} className={styles.input} type="text" placeholder="Start Typing Here" />
+                    </div>
+                    <input value={lie} onChange={e => setLie(e.target.value)} className={styles.input} type="text" placeholder="Start Typing Here" />
                     <div className={styles.buttonAdd} onClick={AddLie}>+</div>
                 </div>
             </div>
