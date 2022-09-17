@@ -15,28 +15,28 @@ export default function Dashboard() {
 
     const AddTruth = () => {
         if (truth !== "" || truth !== null) {
-        axios.post(ENDPOINTS.NEW_TRUTH, { truth }, requestHeaderConfig)
-            .then(res => {
-                console.log(res.data)
-                setTruth("");
-                refetch();
-            })
-            .catch(err => {
-                console.log(err)
-            })
+            axios.post(ENDPOINTS.NEW_TRUTH, { truth }, requestHeaderConfig)
+                .then(res => {
+                    console.log(res.data)
+                    setTruth("");
+                    refetch();
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     }
     const AddLie = () => {
         if (lie !== "" || lie !== null) {
-        axios.post(ENDPOINTS.NEW_LIE, { lie }, requestHeaderConfig)
-            .then(res => {
-                console.log(res.data)
-                setLie("");
-                refetch();
-            })
-            .catch(err => {
-                console.log(err)
-            })
+            axios.post(ENDPOINTS.NEW_LIE, { lie }, requestHeaderConfig)
+                .then(res => {
+                    console.log(res.data)
+                    setLie("");
+                    refetch();
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     }
 
@@ -56,9 +56,9 @@ export default function Dashboard() {
                 <div className={styles.lower}>
                     <h2>Add Lies Here</h2>
                     <div className={styles.previousTruths}>
-                    {!isLoading && data.data.lies.map((lie, key) => {
-                        return <input key={key} className={styles.inputTruth} type="text" value={lie} disabled />
-                    })}
+                        {!isLoading && data.data.lies.map((lie, key) => {
+                            return <input key={key} className={styles.inputTruth} type="text" value={lie} disabled />
+                        })}
                     </div>
                     <input value={lie} onChange={e => setLie(e.target.value)} className={styles.input} type="text" placeholder="Start Typing Here" />
                     <div className={styles.buttonAdd} onClick={AddLie}>+</div>
