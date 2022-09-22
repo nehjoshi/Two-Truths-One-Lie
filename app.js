@@ -14,9 +14,11 @@ app.use(express.json());
 const Register = require('./routes/auth/register');
 const Login = require('./routes/auth/login');
 const GetTruthsAndLies = require('./routes/userInfo/truthsAndLies');
+const InitGame = require('./routes/game/InitGame')
 app.use('/', Register);
 app.use('/', Login);
 app.use('/', GetTruthsAndLies);
+app.use('/', InitGame);
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -26,7 +28,7 @@ const io = new Server(server, {
     }
 })
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log("Connected with socket ID: ", socket.id);
 })
 

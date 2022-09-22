@@ -6,6 +6,7 @@ export const ENDPOINTS = {
     GET_TRUTHS_AND_LIES: URL + '/get-user-truths-and-lies',
     NEW_TRUTH: URL + '/new-truth',
     NEW_LIE: URL + '/new-lie',
+    NEW_GAME: URL + '/init-game',
 }
 /*This file contains the main api endpoint for the app, depending 
 on whether the app is in development or production

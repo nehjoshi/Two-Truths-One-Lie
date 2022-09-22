@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { getTruthsAndLies } from "./handler";
+import { Link } from "react-router-dom";
 export default function Dashboard() {
 
     const [truth, setTruth] = useState("");
@@ -14,7 +15,7 @@ export default function Dashboard() {
     const { isLoading, data, refetch } = useQuery('fetch-truths-and-lies', getTruthsAndLies)
 
     const AddTruth = () => {
-        if (truth !== "" || truth !== null) {
+        if (truth !== "" && truth !== null) {
             axios.post(ENDPOINTS.NEW_TRUTH, { truth }, requestHeaderConfig)
                 .then(res => {
                     console.log(res.data)
@@ -27,7 +28,7 @@ export default function Dashboard() {
         }
     }
     const AddLie = () => {
-        if (lie !== "" || lie !== null) {
+        if (lie !== "" && lie !== null) {
             axios.post(ENDPOINTS.NEW_LIE, { lie }, requestHeaderConfig)
                 .then(res => {
                     console.log(res.data)
@@ -65,7 +66,7 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className={`${styles.half} ${styles.rightHalf}`}>
-                <div className={styles.button}>Join a Game</div>
+                <Link to ='/find-a-game' className={styles.button}>Join a Game</Link>
             </div>
         </Layout>
     )

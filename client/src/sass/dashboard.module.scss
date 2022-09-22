@@ -35,7 +35,7 @@
     flex-direction: column;
 }
 
-.upper {
+.upper, .lower {
     border-bottom: 1px solid gray;
     height: 50%;
     padding: 10px 10px;
@@ -47,16 +47,6 @@
     }
 }
 
-.lower {
-    height: 50%;
-
-    h2 {
-        color: #fff;
-        font-size: 2.5rem;
-        text-align: center;
-        margin-top: 0.7rem;
-    }
-}
 
 .input {
     color: #fff !important;
@@ -107,7 +97,6 @@
     justify-content: center;
     align-items: center;
     overflow-y: scroll;
-    max-height: 60%;
     padding: 10px 10px !important;
-    // border: 1px solid red;
+    max-height: 60%;
 }

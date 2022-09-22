@@ -4,4 +4,6 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Noto Sans", sans-serif;
+  text-decoration: none;
+  color: inherit;
 }
