@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import { ENDPOINTS } from './utils/endpoints';
 import { io } from 'socket.io-client';
 import Search from './pages/Search';
+import Lobby from './pages/Lobby';
 
 const url = ENDPOINTS.MAIN;
 const socket = io(url);
@@ -20,6 +21,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/dashboard' element={<Dashboard socket={socket} />} />
         <Route path='/find-a-game' element={<Search socket={socket}/>} />
+        <Route path='/lobby' element={<Lobby socket={socket}/>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>

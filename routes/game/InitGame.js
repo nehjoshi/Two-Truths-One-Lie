@@ -13,7 +13,7 @@ router.post('/init-game', VerifyToken, async (req, res) => {
     const user = await Users.findOne({ _id });
     const game = await new Games({
         name, roomId, players: [{
-            name: "Neh",
+            name: user.name,
             _id,
             socketId
         }]

@@ -3,12 +3,13 @@ const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 
 router.post('/register', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ message: 'User already exists' });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = new User({
+        name,
         email,
         password: hashedPassword
     });

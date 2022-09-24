@@ -1,14 +1,18 @@
 import Layout from "../../components/Layout";
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
 import { ENDPOINTS } from "../../utils/endpoints";
 import { requestHeaderConfig } from "../../utils/requestHeader";
 import { useState } from "react";
+import styles from "../../sass/findGame.module.scss";
+import { useNavigate } from "react-router-dom";
 
-export default function Search({socket }) {
+export default function Search({ socket }) {
 
     const [roomId, setRoomId] = useState(null);
+    const [destinationId, setDestinationId] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log(socket.id)
@@ -24,12 +28,25 @@ export default function Search({socket }) {
             })
     }, [socket.id])
 
+    const handleRoomEnter = () => {
+        socket.emit("join-room", destinationId, sessionStorage.getItem("_id"));
+        navigate(`/lobby?room=${destinationId}`);
+    }
+
     return (
         <Layout center={true}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                <h1 style={{ color: "#fff" }}>Share your room ID: <span style={{color: "#0077AA"}}>{roomId!==null && roomId}</span></h1>
-                <h1 style={{color: "#E04343"}}>OR</h1>
-                <h1 style={{color: "#fff"}}>Join a Room</h1>
+            <div className={styles.wrapper}>
+                <div className={styles.left}>
+                    <h1 style={{ color: "#fff" }}>Share your room ID: <span style={{ color: "#0077AA" }}>{roomId !== null ? roomId : "Loading..."}</span></h1>
+                </div>
+                <div className={styles.center}>
+                    <h1>OR</h1>
+                </div>
+                <div className={styles.right}>
+                    <h1 style={{ color: "#fff" }}>Join a Room</h1><br />
+                    <TextField className={styles.input} onChange={e => setDestinationId(e.target.value)} variant="standard" type="text" size="large" placeholder="Room ID here" /><br />
+                    <Button variant="contained" onClick={handleRoomEnter}>Start</Button>
+                </div>
                 <CircularProgress size="large" style={{ margin: '20px auto' }} />
             </div>
         </Layout>

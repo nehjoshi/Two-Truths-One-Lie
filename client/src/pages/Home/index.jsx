@@ -25,6 +25,7 @@ export default function Home() {
         if (data?.data?.code === "SUCCESS"){
             document.cookie = `token=${data.data.token} `;
             sessionStorage.setItem("token", data.data.token);
+            sessionStorage.setItem("_id", data.data._id);
             navigate("/dashboard");
         }
         }

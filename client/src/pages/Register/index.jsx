@@ -10,10 +10,11 @@ import { PostData } from "./handler";
 export default function Register() {
 
     //State variables
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const {isLoading, refetch, error, isFetching} = useQuery("register", () => PostData(email, password), {
+    const {isLoading, refetch, error, isFetching} = useQuery("register", () => PostData(email, password, name), {
         enabled: false,
         refetchOnWindowFocus: false
     });
@@ -30,6 +31,7 @@ export default function Register() {
             <div className={styles.wrapper}>
                 <div className={styles.formWrapper}>
                     <h2 className={styles.formHeading}>Create an account</h2><br />
+                    <TextField onChange={e => setName(e.target.value)} className={styles.input} label="Your Name" variant="outlined" /><br />
                     <TextField onChange={e => setEmail(e.target.value)} className={styles.input} label="E-mail" variant="outlined" /><br />
                     <TextField onChange={e => setPassword(e.target.value)} className={styles.input} label="Password" variant="outlined" type="password" /><br />
                     <TextField onChange={e => setConfirmPassword(e.target.value)} className={styles.input} label="Confirm password" variant="outlined" type="password" /><br />
