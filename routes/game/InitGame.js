@@ -9,7 +9,6 @@ router.post('/init-game', VerifyToken, async (req, res) => {
     const { _id } = req;
     //Generate random 6 digit roomId
     const roomId = crypto.randomBytes(6).toString('hex');
-    console.log("Room ID is: ", roomId);
     const user = await Users.findOne({ _id });
     const game = await new Games({
         name, roomId, players: [{

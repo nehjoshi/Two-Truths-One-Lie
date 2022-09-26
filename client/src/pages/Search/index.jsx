@@ -7,12 +7,19 @@ import { requestHeaderConfig } from "../../utils/requestHeader";
 import { useState } from "react";
 import styles from "../../sass/findGame.module.scss";
 import { useNavigate } from "react-router-dom";
+import { GetLobbyInfo } from "./handler";
+import { useQuery } from "react-query";
 
 export default function Search({ socket }) {
 
     const [roomId, setRoomId] = useState(null);
     const [destinationId, setDestinationId] = useState(null);
     const navigate = useNavigate();
+    const {data, isLoading} = useQuery('fetch-lobby-info', () => GetLobbyInfo(roomId), {
+        refetchInterval: 1000,
+        refetchIntervalInBackground: true,
+    });
+    console.log(data);
 
     useEffect(() => {
         console.log(socket.id)
@@ -38,6 +45,7 @@ export default function Search({ socket }) {
             <div className={styles.wrapper}>
                 <div className={styles.left}>
                     <h1 style={{ color: "#fff" }}>Share your room ID: <span style={{ color: "#0077AA" }}>{roomId !== null ? roomId : "Loading..."}</span></h1>
+                    <h2>Players in your lobby: {!isLoading && data?.data?.length}</h2>
                 </div>
                 <div className={styles.center}>
                     <h1>OR</h1>
