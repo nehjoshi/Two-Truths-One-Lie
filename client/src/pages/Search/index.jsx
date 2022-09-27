@@ -56,9 +56,11 @@ export default function Search({ socket }) {
                     <h1>OR</h1>
                 </div>
                 <div className={styles.right}>
-                    <h1 style={{ color: "#fff" }}>Join a Room</h1><br />
-                    <TextField className={styles.input} onChange={e => setDestinationId(e.target.value)} variant="standard" type="text" size="large" placeholder="Room ID here" /><br />
-                    <Button variant="contained" onClick={handleRoomEnter}>Start</Button>
+                    <div className={styles.rightBox}>
+                        <h1>Join a Room</h1><br />
+                        <TextField variant="filled" color="info" onChange={e => setDestinationId(e.target.value)}  placeholder="Room ID here" /><br />
+                        <Button variant="contained" onClick={handleRoomEnter}>Start</Button>
+                    </div>
                 </div>
                 <CircularProgress size="large" style={{ margin: '20px auto' }} />
             </div>

@@ -41,7 +41,7 @@ const Socket = (server) => {
             console.log("Game: ", game);
             const player = game.players.find(player => player.socketId === socket.id);
             if (player){
-                console.log("Found Player")
+                console.log("Found Player");
                 game.players = game.players.filter(player => player.socketId != socket.id);
             }
             await game.save()
