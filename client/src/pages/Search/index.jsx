@@ -15,11 +15,10 @@ export default function Search({ socket }) {
     const [roomId, setRoomId] = useState(null);
     const [destinationId, setDestinationId] = useState(null);
     const navigate = useNavigate();
-    const {data, isLoading} = useQuery('fetch-lobby-info', () => GetLobbyInfo(roomId), {
-        refetchInterval: 1000,
+    const { data, isLoading } = useQuery('fetch-lobby-info', () => GetLobbyInfo(roomId), {
+        refetchInterval: 5000,
         refetchIntervalInBackground: true,
     });
-    console.log(data);
 
     useEffect(() => {
         console.log(socket.id)
@@ -46,6 +45,12 @@ export default function Search({ socket }) {
                 <div className={styles.left}>
                     <h1 style={{ color: "#fff" }}>Share your room ID: <span style={{ color: "#0077AA" }}>{roomId !== null ? roomId : "Loading..."}</span></h1>
                     <h2>Players in your lobby: {!isLoading && data?.data?.length}</h2>
+                    <span className={styles.waiting}>Waiting for {4 - data?.data?.length} more player(s)...</span>
+                    <div className={styles.playerWrapper}>
+                        {!isLoading && data?.data?.length > 0 && data?.data?.map((player, key) => {
+                            return <h2>Player {key + 1}: {player.name}</h2>
+                        })}</div>
+                    {(data?.data?.length !== 4) && <CircularProgress color="info" />}
                 </div>
                 <div className={styles.center}>
                     <h1>OR</h1>

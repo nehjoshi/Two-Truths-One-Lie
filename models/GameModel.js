@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const playerSchema = new mongoose.Schema({
     name: String,
-    _id: String,
     socketId: String,
     score: {
         type: Number,
@@ -20,7 +19,9 @@ const GameSchema = new mongoose.Schema({
         type: [playerSchema],
         default: [],
         required: true
-    }
+    },
+}, {
+    timestamps: true
 });
 const GameModel = mongoose.model('Games', GameSchema);
 module.exports = GameModel;
