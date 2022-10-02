@@ -7,3 +7,11 @@ export const GetLobbyInfo = async (roomId) => {
     requestHeaderConfig(sessionStorage.getItem('token')
     ));
 }
+export const NewGame = async (socketId) => {
+    return await axios.post(
+        ENDPOINTS.NEW_GAME, {
+            name: "New Game",
+            socketId: socketId
+        }, requestHeaderConfig(sessionStorage.getItem('token'))
+    )
+}

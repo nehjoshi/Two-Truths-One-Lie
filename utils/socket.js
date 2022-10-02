@@ -16,8 +16,7 @@ const Socket = (server) => {
             const user = await User.findOne({ _id: userId });
             const game = await Game.findOne({ roomId });
             const player = game.players.find(player => player._id === userId);
-            if (!player){
-                console.log("New PLayer")
+            if (!player && game.players.length < 4){
                 game.players.push({
                     _id: userId,
                     name: user.name,
@@ -52,6 +51,10 @@ const Socket = (server) => {
                 console.log("Error saving game: ", err);
             })
     
+        })
+
+        socket.on('host-game-start', async (roomId) => {
+            socket.emit('game-start', roomId);
         })
     })
 }

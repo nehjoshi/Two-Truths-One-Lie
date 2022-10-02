@@ -3,6 +3,8 @@ import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import Layout from "../../components/Layout";
 import { GetLobbyInfo } from "./handler";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Lobby({ socket }) {
 
@@ -11,7 +13,15 @@ export default function Lobby({ socket }) {
     const { isLoading, data } = useQuery('fetch-lobby-info', () => GetLobbyInfo(roomId), {
         refetchInterval: 5000,
         refetchIntervalInBackground: true,
-    })  
+    });
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        socket.on('game-start', async (roomId) => {
+            console.log("Host Game Start")
+            navigate(`/game?room=${roomId}`);
+        })
+    }, [socket, navigate])
 
     return (
         <Layout center={true} >
