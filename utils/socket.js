@@ -54,11 +54,19 @@ const Socket = (server) => {
         })
 
         socket.on('host-game-start', async (roomId) => {
+            socket.join(roomId);
             console.log("Host attempting to start a new game with room Id", roomId);
             const game = await Game.findOne({roomId});
             const {players} = game;
             const turn = players[0]._id;
             io.emit('game-start', roomId, turn);
+        })
+        socket.on('next-turn-request', async (roomId, turnCount) => {
+            console.log("Next turn requested");
+            const game = await Game.findOne({roomId});
+            const {players} = game;
+            const turn = players[turnCount % 4]._id;
+            io.to(roomId).emit('next-turn', turn);
         })
     })
 }

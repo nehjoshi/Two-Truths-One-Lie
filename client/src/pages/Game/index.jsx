@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Layout from "../../components/Layout";
 import styles from "../../sass/game.module.scss";
-import { GetLobbyInfo } from "./handler";
+import { GetLobbyInfo, GetTruthsAndLies } from "./handler";
 
 export default function Game({ socket }) {
     const { search } = useLocation();
@@ -11,8 +11,18 @@ export default function Game({ socket }) {
     const [players, setPlayers] = useState([]);
     // const [_id, setId] = useState(sessionStorage.getItem("_id"));
     const [turn, setTurn] = useState(sessionStorage.getItem("turn"));
+    const [turnCount, setTurnCount] = useState(0);
+    const [selection, setSelection] = useState(false);
+    const [userTruths, setUserTruths] = useState([]);
+    const [userLies, setUserLies] = useState([]);
 
     useEffect(() => {
+        setSelection(false);
+        socket.on('next-turn', async (turn) => {
+            setTurn(turn);
+            console.log(turn);
+            setTurnCount(turnCount + 1);
+        })
         GetLobbyInfo(roomId)
             .then(res => {
                 console.log(res.data);
@@ -21,7 +31,19 @@ export default function Game({ socket }) {
             .catch(err => {
                 console.log(err);
             })
-    }, [socket, roomId])
+        GetTruthsAndLies()
+            .then(res => {
+                setUserTruths(res.data.truths);
+                setUserLies(res.data.lies);
+            })
+        if (turn === sessionStorage.getItem("_id")) {
+            setSelection(true);
+        }
+    }, [socket, roomId, turnCount, turn])
+
+    const NextTurn = () => {
+        socket.emit('next-turn-request', roomId, turnCount + 1);
+    }
 
     return (
         <Layout>
@@ -43,7 +65,7 @@ export default function Game({ socket }) {
                         <span className={styles.truthOrLie}>Truth or Lie?</span>
                         <h4 className={styles.question}>I have never consumed alcohol.</h4>
                         <div className={styles.buttonWrapper}>
-                            <button className={styles.truthButton}>TRUTH</button>
+                            <button onClick={NextTurn} className={styles.truthButton}>TRUTH</button>
                             <button className={styles.lieButton}>LIE</button>
                         </div>
                     </div>
@@ -59,6 +81,26 @@ export default function Game({ socket }) {
                     </div>
                 </div>
             </div>
+            {selection && <div className={styles.selectionWrapper}>
+                <div className={styles.selectionBox}>
+                    <h3>Choose a truth or a lie</h3>
+                    <h4>Your Truths</h4>
+                    {userTruths.map((truth, index) => {
+                        return (
+                            <span key={index}>{truth}</span>
+                        )
+                    })
+                    }
+                    <h4>Your Lies</h4>
+                    {userLies.map((lie, index) => {
+                        return (
+                            <span key={index}>{lie}</span>
+                        )
+                    })
+                    }
+                </div>
+            </div>
+            }
         </Layout>
     )
 }
