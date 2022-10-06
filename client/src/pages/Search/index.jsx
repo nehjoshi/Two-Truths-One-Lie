@@ -35,6 +35,8 @@ export default function Search({ socket }) {
 
     const handleGameStart = () => {
         socket.emit('host-game-start', roomId);
+        sessionStorage.setItem("currentRoomId", roomId);
+        sessionStorage.setItem("turn", sessionStorage.getItem("_id"));
         navigate(`/game?room=${roomId}`);
     }
 
@@ -44,7 +46,7 @@ export default function Search({ socket }) {
                 <div className={styles.left}>
                     <h1 style={{ color: "#fff" }}>Share your room ID: <span style={{ color: "#0077AA" }}>{roomId !== null ? roomId : "Loading..."}</span></h1>
                     <h2>Players in your lobby: {!isLoading && data?.data?.length}</h2>
-                    <span className={styles.waiting}>Waiting for {4 - data?.data?.length} more player(s)...</span>
+                    <span className={styles.waiting}>Waiting for {4 - data?.data?.length || 4} more player(s)...</span>
                     <div className={styles.playerWrapper}>
                         {!isLoading && data?.data?.length > 0 && data?.data?.map((player, key) => {
                             return <h2>Player {key + 1}: {player.name}</h2>

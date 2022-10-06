@@ -54,7 +54,11 @@ const Socket = (server) => {
         })
 
         socket.on('host-game-start', async (roomId) => {
-            socket.emit('game-start', roomId);
+            console.log("Host attempting to start a new game with room Id", roomId);
+            const game = await Game.findOne({roomId});
+            const {players} = game;
+            const turn = players[0]._id;
+            io.emit('game-start', roomId, turn);
         })
     })
 }

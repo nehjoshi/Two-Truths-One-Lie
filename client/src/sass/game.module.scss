@@ -1,0 +1,91 @@
+.wrapper {
+    width: 95%;
+    margin: 20px auto;
+    height: 90%;
+    background: rgb(60, 60, 60);
+    padding: 20px 20px;
+    position: relative;
+}
+.title {
+    color: rgb(153, 153, 242);
+    text-align: center;
+}
+.roomId {
+    color: rgb(188, 188, 188);
+    position: absolute;
+    top: 5px;
+    left: 5px;  
+}
+.row {
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rowEven {
+    justify-content: space-evenly
+}
+.userBox {
+    height: 300px;
+    display: flex;
+    width: 15%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: gray;
+    transition: 0.2s all ease;
+}
+.userHighlighted {
+    background:rgb(129, 129, 242);
+    box-shadow: rgb(129, 129, 242) 0px 7px 29px 0px;
+}
+.hero {
+    width: 50%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+.truthOrLie {
+    color: rgb(139, 139, 255);
+    font-size: 1.1rem;
+    margin: 10px auto;
+}
+.question {
+    font-size: 2.4rem;
+    color:rgb(255, 255, 255);
+}
+.buttonWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+}
+.truthButton, .lieButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 15px;
+    border-radius: 2.5px;
+    color: #fff;
+    font-size: 1.2rem;
+    background: rgb(91, 197, 91);
+    outline: none;
+    border: none;
+    width: 100px;
+    margin: 0px 20px;
+    cursor: pointer;
+    transition: 0.2s all ease;
+    &:hover {
+        background: rgb(66, 133, 66);
+    }
+}
+.lieButton {
+    background: rgb(255, 64, 64);
+    &:hover {
+        background: rgb(200, 48, 48);
+    }
+}

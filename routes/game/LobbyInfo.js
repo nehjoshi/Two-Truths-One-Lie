@@ -8,7 +8,9 @@ router.get("/get-lobby-info/:roomId", VerifyToken, async (req, res) => {
     if (!game) return res.status(400).send("Game not found");
     const players = game.players.map(player => {
         return {
-            name: player.name
+            name: player.name,
+            score: player.score,
+            playerId: player._id
         }
     })
     return res.send(players)

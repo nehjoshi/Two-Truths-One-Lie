@@ -16,7 +16,7 @@ export default function Dashboard() {
 
     const AddTruth = () => {
         if (truth !== "" && truth !== null) {
-            axios.post(ENDPOINTS.NEW_TRUTH, { truth }, requestHeaderConfig)
+            axios.post(ENDPOINTS.NEW_TRUTH, { truth }, requestHeaderConfig(sessionStorage.getItem("token")))
                 .then(res => {
                     console.log(res.data)
                     setTruth("");
@@ -29,7 +29,7 @@ export default function Dashboard() {
     }
     const AddLie = () => {
         if (lie !== "" && lie !== null) {
-            axios.post(ENDPOINTS.NEW_LIE, { lie }, requestHeaderConfig)
+            axios.post(ENDPOINTS.NEW_LIE, { lie }, requestHeaderConfig(sessionStorage.getItem("token")))
                 .then(res => {
                     console.log(res.data)
                     setLie("");
