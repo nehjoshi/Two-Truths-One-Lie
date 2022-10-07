@@ -73,8 +73,12 @@ export default function Game({ socket }) {
                         <span className={styles.playerQuote}>{players[turnCount]?.name} says...</span>
                         <h4 className={styles.question}>{challenge}</h4>
                         <div className={styles.buttonWrapper}>
-                            <button onClick={NextTurn} className={styles.truthButton}>TRUTH</button>
-                            <button className={styles.lieButton}>LIE</button>
+                            {turn!== sessionStorage.getItem("_id") &&
+                                <>
+                                    <button onClick={NextTurn} className={styles.truthButton}>TRUTH</button>
+                                    <button className={styles.lieButton}>LIE</button>
+                                </>
+                            }
                         </div>
                     </div>
                     <div className={`${styles.userBox} ${turn === players[2]?.playerId ? styles.userHighlighted : null}`}>
