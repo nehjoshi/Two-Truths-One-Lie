@@ -89,6 +89,11 @@
         background: rgb(200, 48, 48);
     }
 }
+.playerQuote {
+    font-size: 1.2rem;
+    color: rgb(255, 255, 255);
+    margin: 10px auto;
+}
 .selectionWrapper {
     position: fixed;
     top: 0;
@@ -109,9 +114,42 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     h3 {
         color: #000;
         font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    h4 {
+        color: #000;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    hr {
+        width: 100%;
+        border: 0.1px solid rgb(220, 220, 220);
+        margin-bottom: 10px;
+    }
+}
+.truthWrapper, .lieWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(88, 88, 195);
+    padding: 10px 10px;
+    border-radius: 2px;
+    margin: 5px 0px;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s all ease;
+    &:hover {
+        background-color: rgb(66, 66, 133);
+    }
+}
+.lieWrapper {
+    background-color: rgb(255, 64, 64);
+    &:hover {
+        background-color: rgb(200, 48, 48);
     }
 }

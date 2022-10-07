@@ -68,6 +68,10 @@ const Socket = (server) => {
             const turn = players[turnCount % 4]._id;
             io.to(roomId).emit('next-turn', turn);
         })
+        socket.on('challenge-submission', async (roomId, challenge, type) => {
+            console.log("Challenge submitted");
+            io.to(roomId).emit('challenge-submitted', challenge, type);
+        })
     })
 }
 module.exports = Socket;

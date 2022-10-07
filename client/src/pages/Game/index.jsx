@@ -15,6 +15,8 @@ export default function Game({ socket }) {
     const [selection, setSelection] = useState(false);
     const [userTruths, setUserTruths] = useState([]);
     const [userLies, setUserLies] = useState([]);
+    const [challenge, setChallenge] = useState("");
+    const [type, setType] = useState("");
 
     useEffect(() => {
         setSelection(false);
@@ -22,6 +24,11 @@ export default function Game({ socket }) {
             setTurn(turn);
             console.log(turn);
             setTurnCount(turnCount + 1);
+        })
+        socket.on('challenge-submitted', (challenge, type) => {
+            setChallenge(challenge);
+            setType(type);
+            console.log("The challenge is " + challenge + " and the type is " + type);
         })
         GetLobbyInfo(roomId)
             .then(res => {
@@ -44,6 +51,10 @@ export default function Game({ socket }) {
     const NextTurn = () => {
         socket.emit('next-turn-request', roomId, turnCount + 1);
     }
+    const SubmitChallenge = (challenge, type) => {
+        socket.emit('challenge-submission', roomId, challenge, type);
+        setSelection(false);
+    }
 
     return (
         <Layout>
@@ -63,7 +74,8 @@ export default function Game({ socket }) {
                     </div>
                     <div className={styles.hero}>
                         <span className={styles.truthOrLie}>Truth or Lie?</span>
-                        <h4 className={styles.question}>I have never consumed alcohol.</h4>
+                        <span className={styles.playerQuote}>{players[turnCount]?.name} says...</span>
+                        <h4 className={styles.question}>{challenge}</h4>
                         <div className={styles.buttonWrapper}>
                             <button onClick={NextTurn} className={styles.truthButton}>TRUTH</button>
                             <button className={styles.lieButton}>LIE</button>
@@ -84,20 +96,20 @@ export default function Game({ socket }) {
             {selection && <div className={styles.selectionWrapper}>
                 <div className={styles.selectionBox}>
                     <h3>Choose a truth or a lie</h3>
+                    <hr />
                     <h4>Your Truths</h4>
                     {userTruths.map((truth, index) => {
                         return (
-                            <span key={index}>{truth}</span>
+                            <span onClick={() => SubmitChallenge(truth, "t")} className={styles.truthWrapper} key={index}>{truth}</span>
                         )
-                    })
-                    }
+                    })}
+                    <br />
                     <h4>Your Lies</h4>
                     {userLies.map((lie, index) => {
                         return (
-                            <span key={index}>{lie}</span>
+                            <span onClick={() => SubmitChallenge(lie, "l")} className={styles.lieWrapper} key={index}>{lie}</span>
                         )
-                    })
-                    }
+                    })}
                 </div>
             </div>
             }
