@@ -22,21 +22,15 @@ export default function Game({ socket }) {
         setSelection(false);
         socket.on('next-turn', async (turn) => {
             setTurn(turn);
-            console.log(turn);
             setTurnCount(turnCount + 1);
         })
         socket.on('challenge-submitted', (challenge, type) => {
             setChallenge(challenge);
             setType(type);
-            console.log("The challenge is " + challenge + " and the type is " + type);
         })
         GetLobbyInfo(roomId)
             .then(res => {
-                console.log(res.data);
                 setPlayers(res.data);
-            })
-            .catch(err => {
-                console.log(err);
             })
         GetTruthsAndLies()
             .then(res => {
@@ -49,6 +43,8 @@ export default function Game({ socket }) {
     }, [socket, roomId, turnCount, turn])
 
     const NextTurn = () => {
+        setChallenge("");
+        setType("");
         socket.emit('next-turn-request', roomId, turnCount + 1);
     }
     const SubmitChallenge = (challenge, type) => {
