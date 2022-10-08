@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Layout from "../../components/Layout";
+import Timer from "../../components/Timer";
 import styles from "../../sass/game.module.scss";
 import { GetLobbyInfo, GetTruthsAndLies } from "./handler";
 
@@ -9,7 +10,6 @@ export default function Game({ socket }) {
     const { search } = useLocation();
     const roomId = new URLSearchParams(search).get("room");
     const [players, setPlayers] = useState([]);
-    // const [_id, setId] = useState(sessionStorage.getItem("_id"));
     const [turn, setTurn] = useState(sessionStorage.getItem("turn"));
     const [turnCount, setTurnCount] = useState(0);
     const [selection, setSelection] = useState(false);
@@ -18,6 +18,8 @@ export default function Game({ socket }) {
     const [challenge, setChallenge] = useState("");
     const [disableSubmission, setDisableSubmission] = useState(false);
     const [userAnswer, setUserAnswer] = useState("");
+    const [allAnswers, setAllAnswers] = useState([]);
+    const [timer, setTimer] = useState(false);
     const [type, setType] = useState("");
 
     useEffect(() => {
@@ -30,6 +32,18 @@ export default function Game({ socket }) {
             setChallenge(challenge);
             setType(type);
         })
+        socket.on('challenge-response-submitted', (userId, answer) => {
+            setAllAnswers([
+                ...allAnswers,
+                {
+                    userId,
+                    answer: answer === 't' ? "Truth" : "Lie"
+                }
+            ])
+        })
+        socket.on('turn-finished', () => {
+            setTimer(true);
+        })
         GetLobbyInfo(roomId)
             .then(res => {
                 setPlayers(res.data);
@@ -39,16 +53,11 @@ export default function Game({ socket }) {
                 setUserTruths(res.data.truths);
                 setUserLies(res.data.lies);
             })
-        if (turn === sessionStorage.getItem("_id")) {
+        if (turn === sessionStorage.getItem("_id") && challenge==="") {
             setSelection(true);
         }
-    }, [socket, roomId, turnCount, turn])
+    }, [socket, roomId, turnCount, turn, allAnswers, challenge])
 
-    // const NextTurn = () => {
-    //     setChallenge("");
-    //     setType("");
-    //     socket.emit('next-turn-request', roomId, turnCount + 1);
-    // }
     const SubmitChallenge = (challenge, type) => {
         socket.emit('challenge-submission', roomId, challenge, type);
         setSelection(false);
@@ -59,6 +68,12 @@ export default function Game({ socket }) {
             setDisableSubmission(true);
             socket.emit('challenge-response', roomId, sessionStorage.getItem("_id"), response);
         }
+    }
+    const DisplayEachPlayerAnswer = (id) => {
+        const elements = allAnswers?.map(answer => {
+            return answer.userId === id ? answer.answer : null;
+        })
+        return elements;
     }
 
     return (
@@ -76,13 +91,15 @@ export default function Game({ socket }) {
                     <div className={`${styles.userBox} ${turn === players[1]?.playerId ? styles.userHighlighted : null}`}>
                         <h3 className={styles.playerName}>{players[1]?.name}</h3>
                         <h3 className={styles.playerScore}>Score: {players[1]?.score}</h3>
+                        {DisplayEachPlayerAnswer(players[1]?.playerId)}
                     </div>
                     <div className={styles.hero}>
                         <span className={styles.truthOrLie}>Truth or Lie?</span>
                         <span className={styles.playerQuote}>{players[turnCount]?.name} says...</span>
                         <h4 className={styles.question}>{challenge}</h4>
                         <div className={styles.buttonWrapper}>
-                            {turn !== sessionStorage.getItem("_id") &&
+                            {timer && <Timer />}
+                            {turn !== sessionStorage.getItem("_id") && !timer &&
                                 <>
                                     <button onClick={() => SubmitChallengeResponse('t')} className={`${styles.truthButton} ${disableSubmission && styles.disabled}`}>TRUTH</button>
                                     <button onClick={() => SubmitChallengeResponse('l')} className={`${styles.lieButton} ${disableSubmission && styles.disabled}`}>LIE</button>
@@ -94,12 +111,14 @@ export default function Game({ socket }) {
                     <div className={`${styles.userBox} ${turn === players[2]?.playerId ? styles.userHighlighted : null}`}>
                         <h3 className={styles.playerName}>{players[2]?.name}</h3>
                         <h3 className={styles.playerScore}>Score: {players[2]?.score}</h3>
+                        {DisplayEachPlayerAnswer(players[2]?.playerId)}
                     </div>
                 </div>
                 <div className={styles.row}>
                     <div className={`${styles.userBox} ${turn === players[3]?.playerId ? styles.userHighlighted : null}`}>
                         <h3 className={styles.playerName}>{players[3]?.name}</h3>
                         <h3 className={styles.playerScore}>Score: {players[3]?.score}</h3>
+                        {DisplayEachPlayerAnswer(players[3]?.playerId)}
                     </div>
                 </div>
             </div>

@@ -80,6 +80,7 @@ const Socket = (server) => {
             game.currentChallengeSubmissions += 1;
             if (game.currentChallengeSubmissions === 3){
                 game.currentChallengeSubmissions = 0;
+                io.to(roomId).emit('turn-finished');
             }
             await game.save();
             io.to(roomId).emit('challenge-response-submitted', userId, response);
