@@ -62,15 +62,27 @@ const Socket = (server) => {
             io.emit('game-start', roomId, turn);
         })
         socket.on('next-turn-request', async (roomId, turnCount) => {
-            console.log("Next turn requested");
             const game = await Game.findOne({roomId});
             const {players} = game;
             const turn = players[turnCount % 4]._id;
             io.to(roomId).emit('next-turn', turn);
         })
         socket.on('challenge-submission', async (roomId, challenge, type) => {
-            console.log("Challenge submitted");
+            const game = await Game.findOne({roomId});
+            game.currentChallenge = challenge;
+            game.currentChallengeAnswer = type;
+            await game.save();
             io.to(roomId).emit('challenge-submitted', challenge, type);
+        })
+        socket.on("challenge-response", async (roomId, userId, response) => {
+            console.log("Challenge response submitted");
+            const game = await Game.findOne({roomId});
+            game.currentChallengeSubmissions += 1;
+            if (game.currentChallengeSubmissions === 3){
+                game.currentChallengeSubmissions = 0;
+            }
+            await game.save();
+            io.to(roomId).emit('challenge-response-submitted', userId, response);
         })
     })
 }

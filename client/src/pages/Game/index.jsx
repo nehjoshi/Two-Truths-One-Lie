@@ -16,6 +16,8 @@ export default function Game({ socket }) {
     const [userTruths, setUserTruths] = useState([]);
     const [userLies, setUserLies] = useState([]);
     const [challenge, setChallenge] = useState("");
+    const [disableSubmission, setDisableSubmission] = useState(false);
+    const [userAnswer, setUserAnswer] = useState("");
     const [type, setType] = useState("");
 
     useEffect(() => {
@@ -42,14 +44,21 @@ export default function Game({ socket }) {
         }
     }, [socket, roomId, turnCount, turn])
 
-    const NextTurn = () => {
-        setChallenge("");
-        setType("");
-        socket.emit('next-turn-request', roomId, turnCount + 1);
-    }
+    // const NextTurn = () => {
+    //     setChallenge("");
+    //     setType("");
+    //     socket.emit('next-turn-request', roomId, turnCount + 1);
+    // }
     const SubmitChallenge = (challenge, type) => {
         socket.emit('challenge-submission', roomId, challenge, type);
         setSelection(false);
+    }
+    const SubmitChallengeResponse = (response) => {
+        setUserAnswer(response === 't' ? "Truth" : "Lie");
+        if (!disableSubmission) {
+            setDisableSubmission(true);
+            socket.emit('challenge-response', roomId, sessionStorage.getItem("_id"), response);
+        }
     }
 
     return (
@@ -73,13 +82,14 @@ export default function Game({ socket }) {
                         <span className={styles.playerQuote}>{players[turnCount]?.name} says...</span>
                         <h4 className={styles.question}>{challenge}</h4>
                         <div className={styles.buttonWrapper}>
-                            {turn!== sessionStorage.getItem("_id") &&
+                            {turn !== sessionStorage.getItem("_id") &&
                                 <>
-                                    <button onClick={NextTurn} className={styles.truthButton}>TRUTH</button>
-                                    <button className={styles.lieButton}>LIE</button>
+                                    <button onClick={() => SubmitChallengeResponse('t')} className={`${styles.truthButton} ${disableSubmission && styles.disabled}`}>TRUTH</button>
+                                    <button onClick={() => SubmitChallengeResponse('l')} className={`${styles.lieButton} ${disableSubmission && styles.disabled}`}>LIE</button>
                                 </>
                             }
                         </div>
+                            {userAnswer !== "" && <span className={styles.playerQuote}>Your response: {userAnswer}</span>}
                     </div>
                     <div className={`${styles.userBox} ${turn === players[2]?.playerId ? styles.userHighlighted : null}`}>
                         <h3 className={styles.playerName}>{players[2]?.name}</h3>

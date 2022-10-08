@@ -20,6 +20,19 @@ const GameSchema = new mongoose.Schema({
         default: [],
         required: true
     },
+    currentChallenge: {
+        type: String,
+        required: false
+    },
+    currentChallengeAnswer: {
+        type: String,
+        required: false
+    },
+    currentChallengeSubmissions: {
+        type: Number,
+        required: false,
+        default: 0
+    }
 }, {
     timestamps: true
 });

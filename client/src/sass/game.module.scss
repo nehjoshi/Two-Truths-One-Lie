@@ -153,3 +153,9 @@
         background-color: rgb(200, 48, 48);
     }
 }
+.disabled {
+    opacity: 0.4;
+    cursor: text !important;
+    pointer-events: none !important;
+    
+}
