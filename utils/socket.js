@@ -74,11 +74,18 @@ const Socket = (server) => {
             await game.save();
             io.to(roomId).emit('challenge-submitted', challenge, type);
         })
-        socket.on("challenge-response", async (roomId, userId, response) => {
-            console.log("Challenge response submitted");
+        socket.on("challenge-response", async (roomId, userId, response, correctAnswer) => {
+            console.log("Challenge response submitted"); 
             const game = await Game.findOne({roomId});
+            const player = game.players.filter(player => player._id == userId)[0];
+            if (response.charAt(0).toLowerCase() === correctAnswer){
+                player.score += 2;
+                console.log(player);
+                console.log("Correct answer!");
+            }
+
             game.currentChallengeSubmissions += 1;
-            if (game.currentChallengeSubmissions === 3){
+            if (game.currentChallengeSubmissions === 1){
                 game.currentChallengeSubmissions = 0;
                 io.to(roomId).emit('turn-finished');
             }

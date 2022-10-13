@@ -64,9 +64,9 @@ export default function Game({ socket }) {
     }
     const SubmitChallengeResponse = (response) => {
         setUserAnswer(response === 't' ? "Truth" : "Lie");
-        if (!disableSubmission) {
+        if (!disableSubmission) { 
             setDisableSubmission(true);
-            socket.emit('challenge-response', roomId, sessionStorage.getItem("_id"), response);
+            socket.emit('challenge-response', roomId, sessionStorage.getItem("_id"), response, type);
         }
     }
     const DisplayEachPlayerAnswer = (id) => {
