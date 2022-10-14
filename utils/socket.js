@@ -33,25 +33,25 @@ const Socket = (server) => {
             })
         })
 
-        socket.on('disconnect', async () => { //Delete a player from the game when they disconnect
-            console.log("Player with ID: ", socket.id, " has disconnected");
-            const game = await Game.findOne({ roomId: socket.roomId });
-            console.log("The game that we're looking for is:");
-            console.log("Game: ", game);
-            const player = game.players.find(player => player.socketId === socket.id);
-            if (player){
-                console.log("Found Player");
-                game.players = game.players.filter(player => player.socketId != socket.id);
-            }
-            await game.save()
-            .then(() => {
-                console.log("Game saved");
-            })
-            .catch(err => {
-                console.log("Error saving game: ", err);
-            })
+        // socket.on('disconnect', async () => { //Delete a player from the game when they disconnect
+        //     console.log("Player with ID: ", socket.id, " has disconnected");
+        //     const game = await Game.findOne({ roomId: socket.roomId });
+        //     console.log("The game that we're looking for is:");
+        //     console.log("Game: ", game);
+        //     const player = game.players.find(player => player.socketId === socket.id);
+        //     if (player){
+        //         console.log("Found Player");
+        //         game.players = game.players.filter(player => player.socketId != socket.id);
+        //     }
+        //     await game.save()
+        //     .then(() => {
+        //         console.log("Game saved");
+        //     })
+        //     .catch(err => {
+        //         console.log("Error saving game: ", err);
+        //     })
     
-        })
+        // })
 
         socket.on('host-game-start', async (roomId) => {
             socket.join(roomId);
@@ -74,7 +74,7 @@ const Socket = (server) => {
             await game.save();
             io.to(roomId).emit('challenge-submitted', challenge, type);
         })
-        socket.on("challenge-response", async (roomId, userId, response, correctAnswer) => {
+        socket.on("challenge-response", async (roomId, userId, response, correctAnswer, turnCount) => {
             console.log("Challenge response submitted"); 
             const game = await Game.findOne({roomId});
             const player = game.players.filter(player => player._id == userId)[0];
@@ -85,9 +85,12 @@ const Socket = (server) => {
             }
 
             game.currentChallengeSubmissions += 1;
-            if (game.currentChallengeSubmissions === 1){
+            if (game.currentChallengeSubmissions === 3){
                 game.currentChallengeSubmissions = 0;
+                const turn = game.players[turnCount % 4]._id;
                 io.to(roomId).emit('turn-finished');
+                io.to(roomId).emit('next-turn', turn);
+
             }
             await game.save();
             io.to(roomId).emit('challenge-response-submitted', userId, response);

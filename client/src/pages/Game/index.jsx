@@ -27,6 +27,11 @@ export default function Game({ socket }) {
         socket.on('next-turn', async (turn) => {
             setTurn(turn);
             setTurnCount(turnCount + 1);
+            console.log("Next players turn is ", turn);
+            if (turn == sessionStorage.getItem("_id") ) {
+                setSelection(true);
+            }
+            console.log("Detected next turn event");
         })
         socket.on('challenge-submitted', (challenge, type) => {
             setChallenge(challenge);
@@ -66,7 +71,7 @@ export default function Game({ socket }) {
         setUserAnswer(response === 't' ? "Truth" : "Lie");
         if (!disableSubmission) { 
             setDisableSubmission(true);
-            socket.emit('challenge-response', roomId, sessionStorage.getItem("_id"), response, type);
+            socket.emit('challenge-response', roomId, sessionStorage.getItem("_id"), response, type, turnCount+1);
         }
     }
     const DisplayEachPlayerAnswer = (id) => {
